@@ -1,0 +1,6 @@
+version: "2"
+authtoken:
+tunnels:
+  laravel:
+    proto: http
+    addr: webserver:80
