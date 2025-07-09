@@ -49,7 +49,7 @@
     <script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/browser/overlayscrollbars.browser.es6.min.js" crossorigin="anonymous"></script> <!--end::Third Party Plugin(OverlayScrollbars)--><!--begin::Required Plugin(popperjs for Bootstrap 5)-->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" crossorigin="anonymous"></script> <!--end::Required Plugin(popperjs for Bootstrap 5)--><!--begin::Required Plugin(Bootstrap 5)-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js" crossorigin="anonymous"></script> <!--end::Required Plugin(Bootstrap 5)--><!--begin::Required Plugin(AdminLTE)-->
-    <script src="{{ asset('js/adminlte.js') }}"></script> <!--end::Required Plugin(AdminLTE)--><!--begin::OverlayScrollbars Configure-->
+    <script src="{{ asset('assets/js/adminlte.js') }}"></script> <!--end::Required Plugin(AdminLTE)--><!--begin::OverlayScrollbars Configure-->
     <script>
         const SELECTOR_SIDEBAR_WRAPPER = ".sidebar-wrapper"
         const Default = {
@@ -76,7 +76,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             // Find the link tag for the main AdminLTE CSS file.
-            const cssLink = document.querySelector('link[href*="css/adminlte.css"]');
+            const cssLink = document.querySelector('link[href*="assets/css/adminlte.css"]');
             if (!cssLink) {
                 return; // Exit if the link isn't found
             }
