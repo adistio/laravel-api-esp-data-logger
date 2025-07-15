@@ -18,17 +18,16 @@
 @endsection
 
 @section('scriptjs')
-<script src="https://cdn.jsdelivr.net/npm/apexcharts@3.37.1/dist/apexcharts.min.js" integrity="sha256-+vh8GkaU7C9/wbSLIcwq82tQ2wTf44aOHA8HlBMwRI8=" crossorigin="anonymous"></script> ChartJS
+<script src="https://cdn.jsdelivr.net/npm/apexcharts@3.37.1/dist/apexcharts.min.js" integrity="sha256-+vh8GkaU7C9/wbSLIcwq82tQ2wTf44aOHA8HlBMwRI8=" crossorigin="anonymous"></script>
 <script>
-
-    const sales_chart_options = {
+    const sensor_chart_options = {
         series: [{
-                name: 'Digital Goods',
-                data: [28, 48, 100, 19, 86, 27, 90]
+                name: 'Temperature (°C)',
+                data: [26.5, 27.2, 28.1, 29.0, 30.2, 29.8, 28.4]
             },
             {
-                name: 'Electronics',
-                data: [65, 59, 80, 81, 56, 55, 40]
+                name: 'Humidity (%)',
+                data: [55, 58, 60, 62, 65, 63, 59]
             }
         ],
         chart: {
@@ -39,9 +38,9 @@
             }
         },
         legend: {
-            show: false
+            show: true
         },
-        colors: ['#0d6efd', '#20c997'],
+        colors: ['#ff5733', '#3498db'], // Adjust as needed
         dataLabels: {
             enabled: false
         },
@@ -51,26 +50,26 @@
         xaxis: {
             type: 'datetime',
             categories: [
-                '2023-01-01',
-                '2023-02-01',
-                '2023-03-01',
-                '2023-04-01',
-                '2023-05-01',
-                '2023-06-01',
-                '2023-07-01'
+                '2025-07-01',
+                '2025-07-02',
+                '2025-07-03',
+                '2025-07-04',
+                '2025-07-05',
+                '2025-07-06',
+                '2025-07-07'
             ]
         },
         tooltip: {
             x: {
-                format: 'MMMM yyyy'
+                format: 'dd MMM yyyy'
             }
         }
     }
 
-    const sales_chart = new ApexCharts(
+    const sensor_chart = new ApexCharts(
         document.querySelector('#revenue-chart'),
-        sales_chart_options
+        sensor_chart_options
     )
-    sales_chart.render()
+    sensor_chart.render()
 </script>
 @endsection
