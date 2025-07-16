@@ -22,6 +22,7 @@ class TempHumidityController extends Controller
             'humidity'    => $validated['humidity'],
         ]);
 
+        // Response JSON
         return response()->json([
             'message' => 'Data saved successfully',
             'data' => $data
