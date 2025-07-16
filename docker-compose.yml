@@ -55,6 +55,16 @@ services:
     networks:
       - laravel
 
+  iot-pusher:
+    build:
+      context: ./iot-pusher
+    container_name: iot-data-logger-client
+    restart: always
+    depends_on:
+      - webserver
+    networks:
+      - laravel
+    
 networks:
   laravel:
 
