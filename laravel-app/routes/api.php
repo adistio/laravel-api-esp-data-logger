@@ -5,7 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\TempHumidityController;
-
+use App\Models\TempHumidity;
 
 Route::post('/login', function (Request $request) {
     $credentials = $request->only('email', 'password');
@@ -32,3 +32,30 @@ Route::middleware('auth:sanctum')->group(function () {
 
 // untuk menyimpan temperature dan humidity
 Route::post('/temphumidity', [TempHumidityController::class, 'store']);
+
+
+Route::get('/sensor-data', function (Illuminate\Http\Request $request) {
+    $date = $request->query('date');
+    $startTime = $request->query('start_time');
+    $endTime = $request->query('end_time');
+
+    $dataQuery = TempHumidity::query();
+
+    if ($date) {
+        $dataQuery->whereDate('created_at', $date);
+
+        if ($startTime && $endTime) {
+            $start = $date . ' ' . $startTime;
+            $end = $date . ' ' . $endTime;
+            $dataQuery->whereBetween('created_at', [$start, $end]);
+        }
+    }
+
+    $data = $dataQuery->orderBy('created_at')->get();
+
+    return response()->json([
+        'temperature' => $data->pluck('temperature'),
+        'humidity' => $data->pluck('humidity'),
+        'times' => $data->pluck('created_at')->map(fn($d) => $d->format('H:i')),
+    ]);
+});

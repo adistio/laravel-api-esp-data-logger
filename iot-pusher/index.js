@@ -33,4 +33,4 @@ async function pushData() {
     }
 }
 
-setInterval(pushData, 5000);
+setInterval(pushData, 30000);

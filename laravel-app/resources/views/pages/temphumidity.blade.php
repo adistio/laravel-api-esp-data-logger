@@ -7,7 +7,14 @@
     <div class="col-lg-12 connectedSortable">
         <div class="card mb-4">
             <div class="card-header">
-                <h3 class="card-title">Monitoring Temperature Humidity</h3>
+                <h3 class="card-title">Data Temperature Humidity</h3>
+                <br>
+                <div style="display: flex; gap: 10px; max-width: 600px;">
+                    <input type="date" id="filter-date" class="form-control">
+                    <input type="time" id="filter-start-time" class="form-control">
+                    <input type="time" id="filter-end-time" class="form-control">
+                    <button id="btn-apply-filter" class="btn btn-primary">Apply</button>
+                </div>
             </div>
             <div class="card-body">
                 <div id="revenue-chart"></div>
@@ -20,56 +27,65 @@
 @section('scriptjs')
 <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.37.1/dist/apexcharts.min.js" integrity="sha256-+vh8GkaU7C9/wbSLIcwq82tQ2wTf44aOHA8HlBMwRI8=" crossorigin="anonymous"></script>
 <script>
-    const sensor_chart_options = {
-        series: [{
-                name: 'Temperature (°C)',
-                data: [26.5, 27.2, 28.1, 29.0, 30.2, 29.8, 28.4]
-            },
-            {
-                name: 'Humidity (%)',
-                data: [55, 58, 60, 62, 65, 63, 59]
-            }
-        ],
-        chart: {
-            height: 300,
-            type: 'area',
-            toolbar: {
-                show: false
-            }
-        },
-        legend: {
-            show: true
-        },
-        colors: ['#ff5733', '#3498db'], // Adjust as needed
-        dataLabels: {
-            enabled: false
-        },
-        stroke: {
-            curve: 'smooth'
-        },
-        xaxis: {
-            type: 'datetime',
-            categories: [
-                '2025-07-01',
-                '2025-07-02',
-                '2025-07-03',
-                '2025-07-04',
-                '2025-07-05',
-                '2025-07-06',
-                '2025-07-07'
-            ]
-        },
-        tooltip: {
-            x: {
-                format: 'dd MMM yyyy'
-            }
-        }
+    let chartInstance = null;
+
+    function fetchAndRenderChart(date = null, startTime = null, endTime = null) {
+        let url = '/api/sensor-data';
+        const params = new URLSearchParams();
+
+        if (date) params.append('date', date);
+        if (startTime) params.append('start_time', startTime);
+        if (endTime) params.append('end_time', endTime);
+
+        url += '?' + params.toString();
+
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                const options = {
+                    series: [{
+                            name: 'Temperature (°C)',
+                            data: data.temperature
+                        },
+                        {
+                            name: 'Humidity (%)',
+                            data: data.humidity
+                        }
+                    ],
+                    chart: {
+                        type: 'area',
+                        height: 300
+                    },
+                    xaxis: {
+                        categories: data.times,
+                        title: {
+                            text: 'Time (Hour:Minute)'
+                        }
+                    },
+                    stroke: {
+                        curve: 'smooth'
+                    }
+                };
+
+                if (chartInstance) {
+                    chartInstance.updateOptions(options);
+                } else {
+                    chartInstance = new ApexCharts(document.querySelector('#revenue-chart'), options);
+                    chartInstance.render();
+                }
+            });
     }
 
-    const sensor_chart = new ApexCharts(
-        document.querySelector('#revenue-chart'),
-        sensor_chart_options
-    )
-    sensor_chart.render()
+    // Initial load
+    fetchAndRenderChart();
+
+    // Apply filter
+    document.getElementById('btn-apply-filter').addEventListener('click', function() {
+        const date = document.getElementById('filter-date').value;
+        const startTime = document.getElementById('filter-start-time').value;
+        const endTime = document.getElementById('filter-end-time').value;
+
+        fetchAndRenderChart(date, startTime, endTime);
+    });
 </script>
 @endsection
